@@ -23,8 +23,7 @@ class NewVisitiorTest(unittest.TestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
-            '작업 아이템 입력'
-        )
+            '작업 아이템 입력')
 
         inputbox.send_keys('공작깃털 사기')
 
@@ -32,9 +31,9 @@ class NewVisitiorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: 공작깃털 사기' for row in rows),
-            "신규 작업이 테이블에 표시되지 않는다")
+        self.assertIn(
+            '1: 공작깃털 사기', 
+            [row.text for row in rows])
 
         self.fail('Finish the test !!')
 
