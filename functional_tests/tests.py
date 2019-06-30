@@ -23,11 +23,6 @@ class NewVisitiorTest(LiveServerTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         self.browser.get(self.live_server_url)
 
-        # 페이지 타이틀 및 헤더 체크
-        self.assertIn('To-Do', self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do', header_text)
-
         # To-Do 입력 텍스트 상자 체크
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
