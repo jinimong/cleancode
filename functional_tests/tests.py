@@ -1,3 +1,5 @@
+import os
+
 from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -5,6 +7,22 @@ from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitiorTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            cls.server_url = 'http://{}'.format(staging_server)
+            return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+
     
     def setUp(self):
         self.browser = webdriver.Chrome('chromedriver')
@@ -22,7 +40,7 @@ class NewVisitiorTest(StaticLiveServerTestCase):
 
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         # To-Do 입력 텍스트 상자 체크
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -58,7 +76,7 @@ class NewVisitiorTest(StaticLiveServerTestCase):
 
         # 프란시스가 홈페이지에 접속한다.
         # 에디스의 리스트는 보이지 않는다.
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('공작깃털 사기', page_text)
         self.assertNotIn('그물 만들기', page_text)
@@ -81,7 +99,7 @@ class NewVisitiorTest(StaticLiveServerTestCase):
 
     def test_layout_and_styling(self):
         # 에디스는 메인페이지를 방문한다
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 768)
 
         # 에디스는 입력상자가 가운데 배치된 것을 본다
