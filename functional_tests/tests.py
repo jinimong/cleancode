@@ -13,6 +13,7 @@ class NewVisitiorTest(StaticLiveServerTestCase):
         staging_server = os.environ.get('STAGING_SERVER')
         if staging_server:
             cls.server_url = 'http://{}'.format(staging_server)
+            cls.live_server_url = ''
             return
         super().setUpClass()
         cls.server_url = cls.live_server_url
